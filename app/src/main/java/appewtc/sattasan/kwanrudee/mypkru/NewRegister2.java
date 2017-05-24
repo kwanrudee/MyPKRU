@@ -1,6 +1,7 @@
 package appewtc.sattasan.kwanrudee.mypkru;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,6 +21,8 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
     private ImageView backImageView, humanImageView, cameraImageView;
     private Button button;
     private Uri humanUri, camaraUri;
+    private String pathImageString, nameImageString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,9 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
 
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(humanUri));
                 humanImageView.setImageBitmap(bitmap);
+
+                findPathAnNAme(humanUri);
+
             } catch (Exception e) {
                 Log.d("24MayV1","e humanUei ==> " + e.toString());
             }
@@ -65,6 +71,8 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
                         .openInputStream(camaraUri));
                 humanImageView.setImageBitmap(bitmap);
 
+                findPathAnNAme(camaraUri);
+
             } catch (Exception e) {
                 Log.d("24MayV1", " e camera ==> " + e.toString());
             }
@@ -72,6 +80,23 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
         }  // if Camera
 
     }   // onActivity
+
+    private void findPathAnNAme(Uri uri) {
+
+        String[] strings = new String[]{MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, strings, null, null, null);
+
+        if (cursor != null) {
+
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            pathImageString = cursor.getString(index);
+        } else {
+            pathImageString = uri.getPath();
+        }
+        Log.d("24MayV1", "Path ==>" + pathImageString);
+    }
+
 
     private void controller() {
         backImageView.setOnClickListener(this);
