@@ -52,13 +52,24 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             }
 
         }   // if human
+// for Camera
+        if ((requestCode == 1)&&(resultCode == RESULT_OK)) {
 
-            // For Camera
-        if ((requestCode == 1) && (resultCode == RESULT_OK)) {
-            Log.d("24MayV1", "camera Result OK");
+            Log.d("24MayV1", "Camera Result OK");
 
-        } //if Camera
+            //Show Image
+            camaraUri = data.getData();
+            try {
 
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver()
+                        .openInputStream(camaraUri));
+                humanImageView.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                Log.d("24MayV1", " e camera ==> " + e.toString());
+            }
+
+        }  // if Camera
 
     }   // onActivity
 
