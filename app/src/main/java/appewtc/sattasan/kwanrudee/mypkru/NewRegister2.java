@@ -1,6 +1,9 @@
 package appewtc.sattasan.kwanrudee.mypkru;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +18,7 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
     private EditText nameEditText, userEditText, passwordEditText;
     private ImageView backImageView, humanImageView, cameraImageView;
     private Button button;
-
+    private Uri humanUri, camaraUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,17 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             //For Human
         if ((requestCode == 0)&& (resultCode == RESULT_OK)) {
             Log.d("24MayV1", "Human OK");
+
+            //Show Image
+            humanUri = data.getData();
+            try {
+
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(humanUri));
+                humanImageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                Log.d("24MayV1","e humanUei ==> " + e.toString());
+            }
+
         }
     }
 
