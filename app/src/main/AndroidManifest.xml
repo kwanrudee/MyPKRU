@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="appewtc.sattasan.kwanrudee.mypkru">
+    //อนุญาติให้อ่านข้อมูลภายนอกได้
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>  //ให้เข้าเน็ตได้
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>  //ให้เข้าตำแหน่งได้
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> //ค้นหาตำแหน่งอย่างละเอียด
+
+
 
     <application
         android:allowBackup="true"
