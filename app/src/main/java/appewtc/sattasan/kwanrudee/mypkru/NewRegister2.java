@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,8 +51,16 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
                 Log.d("24MayV1","e humanUei ==> " + e.toString());
             }
 
-        }
-    }
+        }   // if human
+
+            // For Camera
+        if ((requestCode == 1) && (resultCode == RESULT_OK)) {
+            Log.d("24MayV1", "camera Result OK");
+
+        } //if Camera
+
+
+    }   // onActivity
 
     private void controller() {
         backImageView.setOnClickListener(this);
@@ -87,6 +96,11 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             startActivityForResult(Intent.createChooser(intent, "Please Choose App for Choose Image"), 0);
         }
 
+        //For camera
+        if (v == cameraImageView) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, 1);
+        }
     }
     // main Class
 }
