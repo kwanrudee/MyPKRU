@@ -3,4 +3,7 @@
     <string name="log_in">ลงชื่อใช้งาน</string>
     <string name="user">User :</string>
     <string name="new_register">New Register</string>
+    <string name="title_activity_new_register">NewRegisterActivity</string>
+    <string name="name">Name :</string>
+    <string name="password">password</string>
 </resources>

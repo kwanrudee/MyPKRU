@@ -1,5 +1,6 @@
 package appewtc.sattasan.kwanrudee.mypkru;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
        //For TextView
         if (v == textView) {
+             //Intent to NewRegister
+            Intent intent = new Intent(MainActivity.this,NewRegister2.class);
+            startActivity(intent);
         }
 
         //for Button
