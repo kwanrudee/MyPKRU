@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText userEditText, passwordEditText;
     private TextView textView;
     private Button button;
+    private String userString, passwordString;
 
 
     @Override
@@ -54,8 +55,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //for Button
         if (v == button) {
+            userString = userEditText.getText().toString().trim();
+            passwordString = passwordEditText.getText().toString().trim();
+
+            if (userString.equals("") || passwordString.equals("")) {
+                //Have Space
+                MyAlert myAlert = new MyAlert(this);
+                myAlert.myDialog(getResources().getString(R.string.titleHaveSpace),
+                        getResources().getString(R.string.messageHaveSpace));
+
+            } else {
+                // No Space
+                checkUserAnPass();
+            }
         }
 
+
+    }
+
+    private void checkUserAnPass() {
+
+        String urlPHP = "http://swiftcodingthai.com/pkru/GetUserKwan.php";
 
     }
 } // Main Class นี้คือคลาสหลัก

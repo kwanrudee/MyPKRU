@@ -6,4 +6,15 @@
     <string name="title_activity_new_register">NewRegisterActivity</string>
     <string name="name">Name :</string>
     <string name="password">password</string>
+
+    <!--about Alert Dialog-->
+    <string name="titleHaveSpace">มีช่องว่าง</string>
+    <string name="messageHaveSpace">กรุณากรอกทุกช่องค่ะ</string>
+    <string name="titleNoImage">ยังไม่ใส่รูป</string>
+    <string name="messageNoImage">กรุณาเลือกรูปค่ะ</string>
+    <string name="titleUserFalse">ยังไม่มีผู้ใช้นี้</string>
+    <string name="messageUserFalse">ไม่มีผู้ใช้นีี้ในฐานข้อมูลของเรา</string>
+    <string name="titlePassword">รหัสผิด</string>
+    <string name="messagePassword">กรุณาลองใหม่ รหัสผิด</string>
+
 </resources>

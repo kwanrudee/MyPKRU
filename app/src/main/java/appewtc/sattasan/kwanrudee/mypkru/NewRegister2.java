@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
 
 public class NewRegister2 extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,7 +27,9 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
     private ImageView backImageView, humanImageView, cameraImageView;
     private Button button;
     private Uri humanUri, camaraUri;
-    private String pathImageString, nameImageString;
+    private String pathImageString, nameImageString,
+            nameUserString, userString,passwordString;
+    private boolean aBoolean = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             //For Human
         if ((requestCode == 0)&& (resultCode == RESULT_OK)) {
             Log.d("24MayV1", "Human OK");
+            aBoolean = false;
 
             //Show Image
             humanUri = data.getData();
@@ -58,10 +67,11 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             }
 
         }   // if human
-// for Camera
+            // for Camera
         if ((requestCode == 1)&&(resultCode == RESULT_OK)) {
 
             Log.d("24MayV1", "Camera Result OK");
+            aBoolean = false;
 
             //Show Image
             camaraUri = data.getData();
@@ -91,12 +101,15 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
             cursor.moveToFirst();
             int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             pathImageString = cursor.getString(index);
+
         } else {
             pathImageString = uri.getPath();
         }
-        Log.d("24MayV1", "Path ==>" + pathImageString);
-    }
+        Log.d("24MayV1", "Path ==> " + pathImageString);
+        nameImageString = pathImageString.substring(pathImageString.indexOf("/"));
+        Log.d("24MayV1", "Name ==> " + nameImageString);
 
+    }
 
     private void controller() {
         backImageView.setOnClickListener(this);
@@ -136,6 +149,70 @@ public class NewRegister2 extends AppCompatActivity implements View.OnClickListe
         if (v == cameraImageView) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, 1);
+        }
+
+        // For Register
+        if (v == button) {
+
+            //Get Value From Edit Text
+            nameUserString = nameEditText.getText().toString().trim();
+            userString = userEditText.getText().toString().trim();
+            passwordString = passwordEditText.getText().toString().trim();
+
+            //Check space
+            if (nameUserString.equals("") || userString.equals("") || passwordString.equals("")) {
+                //Have Space
+                MyAlert myAlert = new MyAlert(this);
+                myAlert.myDialog(getResources().getString(R.string.titleHaveSpace),
+                        getResources().getString(R.string.messageHaveSpace));
+            } else if (aBoolean) {
+                //No Image
+                MyAlert myAlert = new MyAlert(this);
+                myAlert.myDialog(getResources().getString(R.string.titleNoImage),
+                        getResources().getString(R.string.messageNoImage));
+
+            } else {
+                //Upload Value to Server
+                uploadValueToServer();
+
+            }
+        }
+    }
+
+    private void uploadValueToServer() {
+        try {
+
+            //Change policy
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy
+                    .Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+        //Up Image to Server
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect("ftp.swiftcodingthai.com", 21,
+                    "pkru@swiftcodingthai.com", "Abc12345");
+            simpleFTP.bin();
+            simpleFTP.cwd("ImageKwan");
+            simpleFTP.stor(new File(pathImageString));
+            simpleFTP.disconnect();
+
+            Toast.makeText(NewRegister2.this, "Upload Image Success",
+                    Toast.LENGTH_SHORT).show();
+
+            // Up Date mySQL
+            String urlPHP = "http://swiftcodingthai.com/pkru/addUserMaster.php";
+            PostNewUser postNewUser = new PostNewUser(this);
+            postNewUser.execute(nameUserString, userString, passwordString, nameImageString
+                    , urlPHP);
+
+            if (Boolean.parseBoolean(postNewUser.get())) {
+                finish();
+            } else {
+                Toast.makeText(NewRegister2.this, "Error Update", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Log.d("24MayV1", "e upload ==>" + e.toString());
         }
     }
     // main Class
